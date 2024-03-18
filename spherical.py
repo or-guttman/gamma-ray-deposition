@@ -36,6 +36,10 @@ def discretize_and_rescale_profiles(rho_0, rho_0_rad, t_0, v_space, M_required):
     # Due to the resolution of v_space, the calculated mass will differ from the required mass
     # Rescale to give M_required at the given resolution
     M_calculated = calc_M(rho_0_disc, t_0, v_space)
+
+    # make sure the v_space is enough for 1% accuracy in M
+    if np.abs(M_calculated/M_required-1)>0.01:
+        raise Exception("M_calculated and M_required differ by >1%, change v_space: increase resolution/limits")
     
     rho_0_disc = rho_0_disc * M_required / M_calculated
     rho_0_rad_disc = rho_0_rad_disc * M_required / M_calculated
